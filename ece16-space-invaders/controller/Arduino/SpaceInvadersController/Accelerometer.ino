@@ -9,14 +9,9 @@ const int X_PIN = A4;
 const int Y_PIN = A3;
 const int Z_PIN = A2;
 
-/*
- * Set the "zero" states when each axis is neutral
- * NOTE: Customize this for your accelerometer sensor!
- */
-const int X_ZERO = 1850;
-const int Y_ZERO = 1850;
-const int Z_ZERO = 1950;
-
+int X_ZERO = 1850;
+int Y_ZERO = 1850;
+int Z_ZERO = 1950;
 
 /*
  * Configure the analog pins to be treated as inputs by the MCU
@@ -25,6 +20,20 @@ void setupAccelSensor() {
   pinMode(X_PIN, INPUT);
   pinMode(Y_PIN, INPUT);
   pinMode(Z_PIN, INPUT);
+
+  
+  /*
+  * Set the "zero" states when each axis is neutral
+  * gets zero value by calbrating 
+  */
+//  writeDisplay("Calbrating:", 0, true);
+//  writeDisplay("Place flat", 1, true);
+//  delay(3000);
+//  X_ZERO = analogRead(X_PIN);
+//  Y_ZERO = analogRead(Y_PIN);
+//  Z_ZERO = analogRead(Z_PIN);
+//  writeDisplay("Calbrated", 2, true);
+
 }
 
 /*

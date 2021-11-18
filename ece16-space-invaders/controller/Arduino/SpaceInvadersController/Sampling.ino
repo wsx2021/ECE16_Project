@@ -44,7 +44,7 @@ void displaySampleRate(unsigned long currentTime) {
     // compute average over nSamples and display it
     double avgRate = nSamples * 1e6 / (currentTime - lastTime);
     String message = String(avgRate) + " Hz";
-    writeDisplay(message.c_str(), 3, false);
+//    writeDisplay(message.c_str(), 3, false);
 
     // reset
     count = 0;
