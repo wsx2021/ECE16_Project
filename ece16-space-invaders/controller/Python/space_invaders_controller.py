@@ -13,62 +13,64 @@ mySocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 mySocket.connect((host, port))
 mySocket.setblocking(False)
 
+
 class PygameController:
-  comms = None
+    comms = None
 
-  def __init__(self, serial_name, baud_rate):
-    self.comms = Communication(serial_name, baud_rate)
+    def __init__(self, serial_name, baud_rate):
+        self.comms = Communication(serial_name, baud_rate)
 
-  def run(self):
-    # 1. make sure data sending is stopped by ending streaming
-    self.comms.send_message("stop")
-    self.comms.clear()
+    def run(self):
+        # 1. make sure data sending is stopped by ending streaming
+        self.comms.send_message("stop")
+        self.comms.clear()
 
-    # 2. start streaming orientation data
-    input("Ready to start? Hit enter to begin.\n")
-    self.comms.send_message("start")
+        # 2. start streaming orientation data
+        input("Ready to start? Hit enter to begin.\n")
+        self.comms.send_message("start")
 
-    # 3. Forever collect orientation and send to PyGame until user exits
-    print("Use <CTRL+C> to exit the program.\n")
-    while True:
-      message = self.comms.receive_message()
-      
-      if(message != None):
-        print(message)
-        command = None
-        message = int(message)
-        # if message == 0:
-        #   command = "FLAT"
-        # if message == 1:
-        #   command = "UP"
-        if message == 2:
-          command = "FIRE"
-          self.comms.send_message("2")
+        # 3. Forever collect orientation and send to PyGame until user exits
+        print("Use <CTRL+C> to exit the program.\n")
+        while True:
+            message = self.comms.receive_message()
+            if message is not None:
+                command = None
+                message = int(message)
+                # if message == 0:
+                #   command = "FLAT"
+                # if message == 1:
+                #   command = "UP"
+                if message == 2:
+                    command = "FIRE"
+                elif message == 3:
+                    command = "LEFT"
+                elif message == 4:
+                    command = "RIGHT"
 
-        if message == 3:
-          command = "LEFT"
-        elif message == 4:
-          command = "RIGHT"
+                if command is not None:
+                    mySocket.send(command.encode("UTF-8"))
 
-        if command is not None:
-          mySocket.send(command.encode("UTF-8"))
+            # data, addr = mySocket.recvfrom(1024) # receive 1024 bytes
+            # if data is not None:
+            #     self.comms.send_message(data)
 
 
-if __name__== "__main__":
-  serial_name = "COM4"
-  baud_rate = 115200
-  controller = PygameController(serial_name, baud_rate)
 
-  try:
 
-    controller.run()
-  except(Exception, KeyboardInterrupt) as e:
-    print(e)
-  finally:
-    print("Exiting the program.")
-    controller.comms.send_message("stop")
-    controller.comms.close()
-    mySocket.send("QUIT".encode("UTF-8"))
-    mySocket.close()
+if __name__ == "__main__":
+    serial_name = "COM4"
+    baud_rate = 115200
+    controller = PygameController(serial_name, baud_rate)
 
-  input("[Press ENTER to finish.]")
+    try:
+        controller.run()
+    except(Exception, KeyboardInterrupt) as e:
+        print(e)
+    finally:
+        print("Exiting the program.")
+        controller.comms.send_message("stop")
+        controller.comms.close()
+        mySocket.send("QUIT".encode("UTF-8"))
+        mySocket.close()
+
+    input("[Press ENTER to finish.]")

@@ -695,6 +695,18 @@ class SpaceInvaders(object):
             display.update()
             self.clock.tick(60)
 
+    # returns life count.
+    def get_life_count(self):
+        if self.livesGroup.has(self.life3):
+            return "Lives: 1"
+        elif self.livesGroup.has(self.life2):
+            return "Lives: 2"
+        elif self.livesGroup.has(self.life1):
+            return "Lives: 3"
+        else:
+            return "Lives: 0"
+
+
 
 if __name__ == '__main__':
     game = SpaceInvaders()
